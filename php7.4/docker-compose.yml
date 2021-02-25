@@ -1,0 +1,36 @@
+# Fichier pour mes amis ;)
+
+# Pour lancer la stack:           docker-compose up
+# Pour accéder au serveur web:    http://localhost:80
+# Pour accéder à phpMyAdmin:      http://localhost:8080  (login: root, password: 1234)
+
+version: '3.1'
+volumes:
+  persistent:
+
+services:
+  php:
+    image: php:7.4-apache
+    ports:
+      - 80:80
+    volumes:
+      - ./www:/var/www/html/
+  db:
+    image: mysql
+    ports: 
+        - "3306:3306"
+    environment:
+        - MYSQL_ROOT_HOST=%
+        - MYSQL_DATABASE=klimbers
+        - MYSQL_ROOT_PASSWORD=1234
+    volumes:
+        - persistent:/var/lib/mysql
+  phpadmin:
+    image: phpmyadmin/phpmyadmin
+    ports: 
+        - "8080:80"
+    environment:
+        - MYSQL_ROOT_PASSWORD=1234
+        - PMA_HOST=db
+    volumes:
+        - persistent:/var/lib/mysql
